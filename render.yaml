@@ -1,0 +1,38 @@
+services:
+  - type: web
+    name: mern-chat-backend
+    plan: free
+    env: docker
+    docker:
+      dockerfilePath: ./server/Dockerfile
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 5000
+      - key: JWT_SECRET
+        generateValue: true
+      - key: MONGODB_URI
+        fromDatabase:
+          name: mern-chat-mongodb
+          property: connectionString
+    healthCheckPath: /ping
+
+  - type: web
+    name: mern-chat-frontend
+    plan: free
+    env: docker
+    docker:
+      dockerfilePath: ./client/Dockerfile
+    envVars:
+      - key: REACT_APP_API_URL
+        fromService:
+          name: mern-chat-backend
+          type: web
+          property: host
+
+databases:
+  - name: mern-chat-mongodb
+    plan: free
+    databaseName: chatapp
+    ipAllowList: []
