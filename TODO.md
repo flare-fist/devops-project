@@ -1,0 +1,6 @@
+- [ ] Update App.js: Remove setAvatar and Chat routes, add Home and DepressionTest routes
+- [ ] Create Home.jsx: Page with "Calculate Depression" button, check login
+- [ ] Create DepressionTest.jsx: Form with 9 PHQ-9 questions, radio options 0-3, submit to calculate score and display result
+- [ ] Update Login.jsx: Change title to "Depression Calculator Login"
+- [ ] Update Register.jsx: Change title to "Depression Calculator Register"
+- [ ] Test the app
