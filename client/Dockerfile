@@ -5,16 +5,16 @@ WORKDIR /app
 
 # Copy package files
 COPY package*.json ./
-COPY yarn.lock ./
+COPY package-lock.json ./
 
-# Install dependencies using yarn
-RUN yarn install --frozen-lockfile
+# Install dependencies using npm
+RUN npm install
 
 # Copy source code
 COPY . .
 
 # Build the app
-RUN yarn build
+RUN npm run build
 
 # Production stage
 FROM nginx:alpine
@@ -27,4 +27,4 @@ COPY nginx.conf /etc/nginx/nginx.conf
 
 EXPOSE 80
 
-CMD ["nginx", "-g", "daemon off;"]
+CMD [\"nginx\", \"-g\", \"daemon off;\"]
