@@ -14,12 +14,10 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v3
     
-    - name: Setup Node.js
+    - name: Setup Node.js for Client
       uses: actions/setup-node@v3
       with:
         node-version: '18'
-        cache: 'npm'
-        cache-dependency-path: client/package-lock.json
     
     - name: Install and build client
       run: |
@@ -28,6 +26,11 @@ jobs:
         npm run build
       env:
         CI: false
+    
+    - name: Setup Node.js for Server
+      uses: actions/setup-node@v3
+      with:
+        node-version: '18'
     
     - name: Test server dependencies
       run: |
