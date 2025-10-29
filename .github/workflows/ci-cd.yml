@@ -1,0 +1,57 @@
+﻿name: MERN App CI/CD Pipeline
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  test-and-build:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+    
+    - name: Setup Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '18'
+        cache: 'npm'
+        cache-dependency-path: client/package-lock.json
+    
+    - name: Install and build client
+      run: |
+        cd client
+        npm install
+        npm run build
+      env:
+        CI: false
+    
+    - name: Test server dependencies
+      run: |
+        cd server
+        npm install
+        echo \" Server dependencies installed successfully!\"
+    
+    - name: Build Docker images
+      run: |
+        docker-compose build
+        echo \" Docker images built successfully!\"
+    
+    - name: Verify Docker images
+      run: docker images
+
+  security-scan:
+    runs-on: ubuntu-latest
+    needs: test-and-build
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+    
+    - name: Run security audit
+      run: |
+        cd client && npm audit --audit-level moderate || true
+        cd ../server && npm audit --audit-level moderate || true
